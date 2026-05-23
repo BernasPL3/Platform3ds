@@ -2,50 +2,43 @@
 #include <citro2d.h>
 
 int main() {
+
     gfxInitDefault();
+
+    C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
     C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
 
     C3D_RenderTarget* top =
         C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
 
-    float playerX = 120;
-    float playerY = 100;
+    float x = 120;
+    float y = 100;
 
     while (aptMainLoop()) {
 
         hidScanInput();
 
-        u32 kDown = hidKeysHeld();
+        u32 kHeld = hidKeysHeld();
 
-        if (kDown & KEY_START)
+        if (kHeld & KEY_START)
             break;
 
-        if (kDown & KEY_LEFT)
-            playerX -= 2;
-
-        if (kDown & KEY_RIGHT)
-            playerX += 2;
-
-        if (kDown & KEY_UP)
-            playerY -= 2;
-
-        if (kDown & KEY_DOWN)
-            playerY += 2;
+        if (kHeld & KEY_LEFT)  x -= 2;
+        if (kHeld & KEY_RIGHT) x += 2;
+        if (kHeld & KEY_UP)    y -= 2;
+        if (kHeld & KEY_DOWN)  y += 2;
 
         C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
-        C2D_TargetClear(top, C2D_Color32(0,0,50,255));
+        C2D_TargetClear(top, C2D_Color32(0,0,80,255));
         C2D_SceneBegin(top);
 
-        C2D_DrawRectangle(
-            playerX,
-            playerY,
+        C2D_DrawRectSolid(
+            x,
+            y,
             0,
             20,
             20,
-            C2D_Color32(255,255,255,255),
-            C2D_Color32(255,255,255,255),
-            C2D_Color32(255,255,255,255),
             C2D_Color32(255,255,255,255)
         );
 
@@ -53,6 +46,7 @@ int main() {
     }
 
     C2D_Fini();
+    C3D_Fini();
     gfxExit();
 
     return 0;
